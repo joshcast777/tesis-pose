@@ -1,0 +1,162 @@
+{
+	"prettier.arrowParens": "avoid",
+	"prettier.endOfLine": "lf",
+	"prettier.enableDebugLogs": true,
+	"prettier.printWidth": 1000,
+	"prettier.tabWidth": 4,
+	"prettier.trailingComma": "none",
+	"prettier.useEditorConfig": false,
+	"prettier.useTabs": true,
+	"prettier.vueIndentScriptAndStyle": true,
+	"prettier.singleAttributePerLine": false,
+	"prettier.singleQuote": false,
+	"prettier.semi": true,
+	"prettier.bracketSpacing": true,
+	"prettier.bracketSameLine": false,
+	"prettier.proseWrap": "always",
+	"prettier.quoteProps": "as-needed",
+	"prettier.jsxSingleQuote": false,
+	"files.associations": {
+		"*.css": "tailwindcss",
+		"*.scss": "tailwindcss"
+	},
+	"auto-close-tag.activationOnLanguage": [
+		"xml",
+		"ejs",
+		"javascript",
+		"javascriptreact",
+		"typescript",
+		"typescriptreact",
+		"plaintext",
+		"markdown",
+		"HTML (EEx)",
+		"HTML (Eex)",
+	],
+	"better-comments.tags": [
+		{
+			"backgroundColor": "transparent",
+			"bold": false,
+			"color": "#3498db",
+			"italic": false,
+			"strikethrough": false,
+			"tag": "!",
+			"underline": false
+		},
+		{
+			"backgroundColor": "transparent",
+			"bold": false,
+			"color": "#ff2d00",
+			"italic": false,
+			"strikethrough": false,
+			"tag": "?",
+			"underline": false
+		},
+		{
+			"backgroundColor": "transparent",
+			"bold": false,
+			"color": "#ff8c00",
+			"italic": false,
+			"strikethrough": false,
+			"tag": "todo",
+			"underline": false
+		},
+		{
+			"backgroundColor": "transparent",
+			"bold": false,
+			"color": "#98c379",
+			"italic": false,
+			"strikethrough": false,
+			"tag": "*",
+			"underline": false
+		}
+	],
+	"bracketLens.minBracketScopeLines": 3,
+	"bracketLens.mode": "auto",
+	"css.format.spaceAroundSelectorSeparator": true,
+	"css.lint.duplicateProperties": "warning",
+	"css.lint.float": "warning",
+	"css.lint.idSelector": "warning",
+	"scss.format.spaceAroundSelectorSeparator": true,
+	"scss.lint.unknownAtRules": "ignore",
+	"scss.lint.duplicateProperties": "warning",
+	"scss.lint.float": "warning",
+	"scss.lint.idSelector": "warning",
+	"editor.bracketPairColorization.independentColorPoolPerBracketType": true,
+	"editor.formatOnPaste": true,
+	"editor.formatOnSave": true,
+	"editor.formatOnType": true,
+	"editor.guides.bracketPairs": true,
+	"editor.guides.bracketPairsHorizontal": true,
+	"editor.guides.highlightActiveIndentation": false,
+	"editor.insertSpaces": false,
+	"editor.scrollbar.horizontalScrollbarSize": 10,
+	"editor.scrollbar.verticalScrollbarSize": 10,
+	"editor.semanticHighlighting.enabled": true,
+	"editor.showFoldingControls": "mouseover",
+	"editor.wordWrap": "bounded",
+	"editor.wordWrapColumn": 999999999,
+	"emmet.syntaxProfiles": {
+		"html": {
+			//if element created is more than 2, it will break to new line for each element
+			"inline_break": 1
+		}
+	},
+	"errorLens.fontFamily": "'FiraCode Nerd Font Mono'",
+	"errorLens.gutterIconsEnabled": true,
+	"files.insertFinalNewline": true,
+	"files.trimFinalNewlines": true,
+	"files.trimTrailingWhitespace": true,
+	"indentRainbow.colors": [
+		"rgba(255,255,64,0.1)",
+		"rgba(127,255,127,0.1)",
+		"rgba(255,127,255,0.1)",
+		"rgba(79,236,236,0.1)",
+		"rgba(247, 194, 68, 0.1)",
+		"rgba(240, 120, 80, 0.1)",
+		"rgba(156, 221, 41, 0.1)",
+		"rgba(196, 151, 212, 0.1)"
+	],
+	"editor.language.colorizedBracketPairs": [
+		[
+			"#ffff40"
+		],
+		[
+			"#7fff7f"
+		],
+		[
+			"#ff7fff"
+		],
+		[
+			"#4fedec"
+		],
+		[
+			"#f7c244"
+		],
+		[
+			"#f07850"
+		],
+		[
+			"#9cdd29"
+		],
+		[
+			"#c497d4"
+		]
+	],
+	"javascript.updateImportsOnFileMove.enabled": "always",
+	"typescript.updateImportsOnFileMove.enabled": "always",
+	"tailwindCSS.emmetCompletions": true,
+	"terminal.integrated.cursorWidth": 4,
+	"editor.renderWhitespace": "all",
+	"files.autoSave": "afterDelay",
+	"editor.tokenColorCustomizations": {
+		"textMateRules": [
+			{
+				"name": "envKeys",
+				"scope": "string.quoted.single.ini,constant.numeric.ini,string.quoted.double.ini",
+				"settings": {
+					"foreground": "#e2ae4d3b"
+				}
+			}
+		]
+	},
+}
