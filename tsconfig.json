@@ -29,7 +29,13 @@
 		"strictFunctionTypes": true,
 		"strictPropertyInitialization": true,
 		"noImplicitThis": true,
-		"alwaysStrict": true
+		"alwaysStrict": true,
+		"baseUrl": ".",
+		"paths": {
+			"@/*": [
+				"./src/*"
+			]
+		}
 	},
 	"include": [
 		"src"

@@ -63,7 +63,7 @@
 		"selector-max-specificity": "0,5,0",
 		"selector-max-type": 5,
 		"selector-max-universal": 1,
-		"time-min-milliseconds": 3000,
+		"time-min-milliseconds": 300,
 		"alpha-value-notation": "number",
 		"color-function-notation": "modern",
 		"font-weight-notation": "numeric",
