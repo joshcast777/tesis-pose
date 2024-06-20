@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { ApiResponse, AuthUser } from "@/types";
-import { User, UserCredential, getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { User, UserCredential, getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { app } from "../firebase";
 import { errorResponse } from "@/constants";
 
@@ -16,6 +16,22 @@ export async function firebaseSignInUser({ email, password }: AuthUser): Promise
 			success: true,
 			message: "",
 			data: user.uid
+		};
+	} catch (error: any) {
+		return {
+			success: false,
+			message: `${errorResponse}${error.code}`
+		};
+	}
+}
+
+export async function firebaseSignOutUser(): Promise<ApiResponse<string>> {
+	try {
+		await signOut(firebaseAuth);
+
+		return {
+			success: true,
+			message: ""
 		};
 	} catch (error: any) {
 		return {

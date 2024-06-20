@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-function showToast(clearErrorMessages: () => void): void {
+const showToast = (clearErrorMessages: () => void): void => {
 	toast.error("", {
 		className: "bg-rose-800 gap-5 border-rose-800",
 		description: (
@@ -29,12 +29,12 @@ function showToast(clearErrorMessages: () => void): void {
 			clearErrorMessages();
 		}
 	});
-}
+};
 
-function clearErrorMessages(clearAuthErrorMessage: () => void, clearUserErrorMessage: () => void): void {
+const clearErrorMessages = (clearAuthErrorMessage: () => void, clearUserErrorMessage: () => void): void => {
 	clearAuthErrorMessage();
 	clearUserErrorMessage();
-}
+};
 
 export default function Auth(): React.ReactNode {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -47,7 +47,7 @@ export default function Auth(): React.ReactNode {
 		defaultValues
 	});
 
-	async function onSubmit(formData: AuthUser): Promise<void> {
+	const onSubmit = async (formData: AuthUser): Promise<void> => {
 		const authUser: AuthUser = structuredClone(formData);
 
 		setIsLoading(true);
@@ -55,9 +55,11 @@ export default function Auth(): React.ReactNode {
 		await signInUser(authUser);
 
 		setIsLoading(false);
-	}
+	};
 
 	useEffect((): void => {
+		console.log(authErrorMessage);
+		console.log(userErrorMessage);
 		if (authErrorMessage !== "" || userErrorMessage !== "") {
 			showToast((): void => {
 				clearErrorMessages(clearAuthErrorMessage, clearUserErrorMessage);

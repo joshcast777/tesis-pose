@@ -15,7 +15,7 @@ export type AuthStore = {
 	// setSuccessMessage: (successMessage: string) => void;
 	// setUserAdmin: (userAdmin: IUserAdmin) => void;
 	signInUser: ({ email, password }: AuthUser) => Promise<void>;
-	// signOutUser: () => Promise<void>;
+	signOutUser: () => Promise<void>;
 	// signUpUser: ({ email, password }: IAuthUser) => Promise<void>;
 	// updateUserEmail: (email: string) => Promise<void>;
 };

@@ -1,3 +1,3 @@
-import Dashboard from "./Dashboard";
+import DoctorDashboard from "./DoctorDashboard";
 
-export { Dashboard };
+export { DoctorDashboard };

@@ -1,18 +1,32 @@
 import React, { useEffect, useState } from "react";
-import { Loader } from "@/components/ui";
-import { doctorStore } from "@/store/doctor.store";
+import { Button, Loader } from "@/components/ui";
 import { DataTable } from "./components/Datatable";
 import { columns } from "@/components/ui/columns";
+import { authStore, userStore } from "@/store";
+import { NavigateFunction, useNavigate } from "react-router-dom";
 
 export default function AdminDashboard(): React.ReactNode {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 
-	const { doctors, getDoctors } = doctorStore();
+	const { signOutUser } = authStore();
+	const { doctors, getDoctors } = userStore();
+
+	const navigate: NavigateFunction = useNavigate();
 
 	// let doctorsData: DoctorTable[] = [];
 
+	const signOutSession = async (): Promise<void> => {
+		setIsLoading(true);
+
+		await signOutUser();
+
+		setIsLoading(false);
+
+		navigate("/auth");
+	};
+
 	useEffect((): void => {
-		async function execAsync(): Promise<void> {
+		const execAsync = async (): Promise<void> => {
 			setIsLoading(true);
 
 			await getDoctors();
@@ -28,7 +42,7 @@ export default function AdminDashboard(): React.ReactNode {
 			// );
 
 			setIsLoading(false);
-		}
+		};
 
 		execAsync();
 	}, []);
@@ -38,10 +52,10 @@ export default function AdminDashboard(): React.ReactNode {
 			{isLoading && <Loader />}
 
 			<header className="py-3 shadow-md">
-				<div className="container flex h-20 items-center justify-center">
+				<div className="container flex h-20 items-center justify-between">
 					<img src="/src/assets/ug-logo.png" alt="UG Logo" className="h-full" />
 
-					{/* <Button>Cerrar sesión</Button> */}
+					<Button onClick={signOutSession}>Cerrar sesión</Button>
 				</div>
 			</header>
 

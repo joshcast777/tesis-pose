@@ -1,5 +1,5 @@
 import { accessToken, errorResponse, role, uid } from "@/constants";
-import { firebaseGetUser, firebaseSignInUser } from "@/firebase/services";
+import { firebaseGetUser, firebaseSignInUser, firebaseSignOutUser } from "@/firebase/services";
 import { ApiResponse, AuthStore, AuthUser } from "@/types";
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
@@ -38,11 +38,15 @@ export const authStore = create<AuthStore>()(
 			);
 		},
 		signInUser: async ({ email, password }: AuthUser): Promise<void> => {
+			console.log(email);
+			console.log(password);
 			const authApiResponse: ApiResponse<string> = await firebaseSignInUser({
 				email,
 				password
 			});
 
+			console.log(authApiResponse.message);
+			console.log(authApiResponse.message !== "");
 			if (authApiResponse.message !== "") {
 				set(
 					{
@@ -80,6 +84,76 @@ export const authStore = create<AuthStore>()(
 				false,
 				"SET_IS_AUTHENTICATED"
 			);
+		},
+		signOutUser: async (): Promise<void> => {
+			const apiResponse: ApiResponse<string> = await firebaseSignOutUser();
+
+			if (!apiResponse.success) {
+				set(
+					{
+						errorMessage: `${errorResponse}No se pudo cerrar sesión`
+					},
+					false,
+					"SET_ERROR_MESSAGE"
+				);
+
+				return;
+			}
+
+			localStorage.removeItem(uid);
+			localStorage.removeItem(role);
+
+			set(
+				{
+					isAuthenticated: false,
+					role: ""
+				},
+				false,
+				"SET_IS_AUTHENTICATED"
+			);
+
+			// const authApiResponse: ApiResponse<string> = await firebaseSignInUser({
+			// 	email,
+			// 	password
+			// });
+
+			// if (authApiResponse.message !== "") {
+			// 	set(
+			// 		{
+			// 			errorMessage: authApiResponse.message.includes("auth/invalid-credential") ? `${errorResponse}${authApiResponse.message}` : "Error/Vuelva a intentarlo"
+			// 		},
+			// 		false,
+			// 		"SET_ERROR_MESSAGE"
+			// 	);
+
+			// 	return;
+			// }
+
+			// const userApiResponse = await firebaseGetUser(authApiResponse.data!);
+
+			// if (userApiResponse.message !== "") {
+			// 	set(
+			// 		{
+			// 			errorMessage: authApiResponse.message.includes("auth/invalid-credential") ? `${errorResponse}${authApiResponse.message}` : "Error/Vuelva a intentarlo"
+			// 		},
+			// 		false,
+			// 		"SET_ERROR_MESSAGE"
+			// 	);
+
+			// 	return;
+			// }
+
+			// localStorage.setItem(uid, userApiResponse.data!.id);
+			// localStorage.setItem(role, userApiResponse.data!.role);
+
+			// set(
+			// 	{
+			// 		isAuthenticated: true,
+			// 		role: userApiResponse.data!.role
+			// 	},
+			// 	false,
+			// 	"SET_IS_AUTHENTICATED"
+			// );
 		}
 	}))
 );
