@@ -113,11 +113,6 @@
 			"class",
 			"id"
 		],
-		"property-allowed-list": [
-			"font-family",
-			"transition",
-			"animation"
-		],
 		"at-rule-no-unknown": [
 			true,
 			{

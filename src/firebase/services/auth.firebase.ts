@@ -1,26 +1,25 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { ApiResponse, AuthUser } from "@/types";
-import { User, UserCredential, getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { Auth, createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { app } from "../firebase";
-import { errorResponse } from "@/constants";
 
-const firebaseAuth = getAuth(app);
+const firebaseAuth: Auth = getAuth(app);
 
-export async function firebaseSignInUser({ email, password }: AuthUser): Promise<ApiResponse<string>> {
+export async function firebaseSignInUser({ email, password }: AuthUser): Promise<ApiResponse<undefined>> {
 	try {
-		const userCredentials: UserCredential = await signInWithEmailAndPassword(firebaseAuth, email, password);
-		const user: User = { ...userCredentials.user };
+		await signInWithEmailAndPassword(firebaseAuth, email, password);
 
 		return {
 			success: true,
-			message: "",
-			data: user.uid
+			message: ""
 		};
 	} catch (error: any) {
+		console.error(error);
+
 		return {
 			success: false,
-			message: `${errorResponse}${error.code}`
+			message: error.code
 		};
 	}
 }
@@ -34,11 +33,47 @@ export async function firebaseSignOutUser(): Promise<ApiResponse<string>> {
 			message: ""
 		};
 	} catch (error: any) {
+		console.error(error);
+
 		return {
 			success: false,
-			message: `${errorResponse}${error.code}`
+			message: error.code
 		};
 	}
+}
+
+export async function firebaseSignUpUser({ email, password }: AuthUser): Promise<ApiResponse<undefined>> {
+	try {
+		await createUserWithEmailAndPassword(firebaseAuth, email, password);
+
+		return {
+			success: true,
+			message: ""
+		};
+	} catch (error: any) {
+		console.error(error);
+
+		return {
+			success: false,
+			message: error.code
+		};
+	}
+}
+
+export async function firebaseGetAuthenticatedUser(): Promise<void> {
+	onAuthStateChanged(
+		firebaseAuth,
+		(user) => {
+			if (user) {
+				console.log(user);
+			} else {
+				console.log("Error");
+			}
+		},
+		(error: any) => {
+			console.error(error);
+		}
+	);
 }
 
 // signInWithEmailAndPassword(auth, email, password)

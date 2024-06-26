@@ -1,159 +1,101 @@
-import { accessToken, errorResponse, role, uid } from "@/constants";
-import { firebaseGetUser, firebaseSignInUser, firebaseSignOutUser } from "@/firebase/services";
-import { ApiResponse, AuthStore, AuthUser } from "@/types";
+import { DefaultValues, ErrorMessages, LocalStorageKeys } from "@/constants";
+import { firebaseGetDoctor, firebaseSignInUser, firebaseSignOutUser, firebaseSignUpUser } from "@/firebase/services";
+import { ApiResponse, AuthUser, Doctor } from "@/types";
+import { AuthStore } from "@/types/store";
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 
 export const authStore = create<AuthStore>()(
 	devtools((set) => ({
-		errorMessage: "",
-		isAuthenticated: Boolean(localStorage.getItem(uid)) && Boolean(localStorage.getItem(accessToken)) && Boolean(localStorage.getItem(role)),
-		role: Boolean(localStorage.getItem(role)) ? localStorage.getItem(role)! : "",
-		clearErrorMessage: (): void => {
+		isAuthenticated: Boolean(localStorage.getItem(LocalStorageKeys.Id)) && Boolean(localStorage.getItem(LocalStorageKeys.Role)) && localStorage.getItem(LocalStorageKeys.Id) !== "" && localStorage.getItem(LocalStorageKeys.Role) !== "",
+		currentUser: DefaultValues.Doctor,
+		clearIsAuthenticated: (): void => {
 			set(
 				{
-					errorMessage: ""
+					isAuthenticated: false,
+					currentUser: DefaultValues.Doctor
 				},
 				false,
-				"SET_ERROR_MESSAGE"
+				"CLEAR_ERROR_MESSAGE"
 			);
 		},
-		setErrorMessage: (message: string): void => {
+		getCurrentUser: async (id: string): Promise<void> => {
+			const apiResponse: ApiResponse<Doctor> = await firebaseGetDoctor(id);
+
+			if (!apiResponse.success) {
+				set(
+					{
+						currentUser: DefaultValues.Doctor,
+						isAuthenticated: false
+					},
+					false,
+					"SET_ERROR_MESSAGE"
+				);
+
+				return;
+			}
+
+			localStorage.setItem(LocalStorageKeys.Id, apiResponse.data!.id);
+			localStorage.setItem(LocalStorageKeys.Role, apiResponse.data!.role);
+
 			set(
 				{
-					errorMessage: message
+					currentUser: apiResponse.data!,
+					isAuthenticated: true
 				},
 				false,
-				"SET_ERROR_MESSAGE"
+				"SET_CURRENT_USER"
 			);
 		},
-		setIsAuthenticated: (isAuthenticated: boolean, role: string): void => {
+		setIsAuthenticated: (user: Doctor): void => {
 			set(
 				{
-					isAuthenticated,
-					role
+					isAuthenticated: true,
+					currentUser: user
 				},
 				false,
 				"SET_AUTHENTICATED_USER"
 			);
 		},
-		signInUser: async ({ email, password }: AuthUser): Promise<void> => {
-			console.log(email);
-			console.log(password);
-			const authApiResponse: ApiResponse<string> = await firebaseSignInUser({
+		signInUser: async ({ email, password }: AuthUser): Promise<string> => {
+			const apiResponse: ApiResponse<undefined> = await firebaseSignInUser({
 				email,
 				password
 			});
 
-			console.log(authApiResponse.message);
-			console.log(authApiResponse.message !== "");
-			if (authApiResponse.message !== "") {
-				set(
-					{
-						errorMessage: authApiResponse.message.includes("auth/invalid-credential") ? `${errorResponse}${authApiResponse.message}` : "Error/Vuelva a intentarlo"
-					},
-					false,
-					"SET_ERROR_MESSAGE"
-				);
-
-				return;
+			if (apiResponse.message !== "") {
+				if (apiResponse.message === ErrorMessages.InvalidCredentials) {
+					return ErrorMessages.InvalidCredentials;
+				} else {
+					return ErrorMessages.CouldNotCompleteTask;
+				}
 			}
 
-			const userApiResponse = await firebaseGetUser(authApiResponse.data!);
-
-			if (userApiResponse.message !== "") {
-				set(
-					{
-						errorMessage: authApiResponse.message.includes("auth/invalid-credential") ? `${errorResponse}${authApiResponse.message}` : "Error/Vuelva a intentarlo"
-					},
-					false,
-					"SET_ERROR_MESSAGE"
-				);
-
-				return;
-			}
-
-			localStorage.setItem(uid, userApiResponse.data!.id);
-			localStorage.setItem(role, userApiResponse.data!.role);
-
-			set(
-				{
-					isAuthenticated: true,
-					role: userApiResponse.data!.role
-				},
-				false,
-				"SET_IS_AUTHENTICATED"
-			);
+			return "";
 		},
-		signOutUser: async (): Promise<void> => {
+		signOutUser: async (): Promise<string> => {
 			const apiResponse: ApiResponse<string> = await firebaseSignOutUser();
 
 			if (!apiResponse.success) {
-				set(
-					{
-						errorMessage: `${errorResponse}No se pudo cerrar sesión`
-					},
-					false,
-					"SET_ERROR_MESSAGE"
-				);
-
-				return;
+				return ErrorMessages.CouldNotCompleteTask;
 			}
 
-			localStorage.removeItem(uid);
-			localStorage.removeItem(role);
+			localStorage.removeItem(LocalStorageKeys.Id);
+			localStorage.removeItem(LocalStorageKeys.Role);
 
-			set(
-				{
-					isAuthenticated: false,
-					role: ""
-				},
-				false,
-				"SET_IS_AUTHENTICATED"
-			);
+			return "";
+		},
+		signUpUser: async ({ email, password }: AuthUser): Promise<string> => {
+			const apiResponse: ApiResponse<undefined> = await firebaseSignUpUser({
+				email,
+				password
+			});
 
-			// const authApiResponse: ApiResponse<string> = await firebaseSignInUser({
-			// 	email,
-			// 	password
-			// });
+			if (apiResponse.message !== "") {
+				return ErrorMessages.CouldNotCompleteTask;
+			}
 
-			// if (authApiResponse.message !== "") {
-			// 	set(
-			// 		{
-			// 			errorMessage: authApiResponse.message.includes("auth/invalid-credential") ? `${errorResponse}${authApiResponse.message}` : "Error/Vuelva a intentarlo"
-			// 		},
-			// 		false,
-			// 		"SET_ERROR_MESSAGE"
-			// 	);
-
-			// 	return;
-			// }
-
-			// const userApiResponse = await firebaseGetUser(authApiResponse.data!);
-
-			// if (userApiResponse.message !== "") {
-			// 	set(
-			// 		{
-			// 			errorMessage: authApiResponse.message.includes("auth/invalid-credential") ? `${errorResponse}${authApiResponse.message}` : "Error/Vuelva a intentarlo"
-			// 		},
-			// 		false,
-			// 		"SET_ERROR_MESSAGE"
-			// 	);
-
-			// 	return;
-			// }
-
-			// localStorage.setItem(uid, userApiResponse.data!.id);
-			// localStorage.setItem(role, userApiResponse.data!.role);
-
-			// set(
-			// 	{
-			// 		isAuthenticated: true,
-			// 		role: userApiResponse.data!.role
-			// 	},
-			// 	false,
-			// 	"SET_IS_AUTHENTICATED"
-			// );
+			return "";
 		}
 	}))
 );

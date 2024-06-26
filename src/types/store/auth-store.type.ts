@@ -1,21 +1,15 @@
-import { AuthUser } from "@/types";
+import { AuthUser, Doctor } from "@/types";
 
 export type AuthStore = {
-	errorMessage: string;
-	// isAuthChecked: boolean;
 	isAuthenticated: boolean;
-	role: string;
-	// userAdmin: IUserAdmin;
-	// authenticateUser: () => FirebaseUnsubscribe;
-	// getAuthenticatedUser: (uid: string) => Promise<void>;
-	clearErrorMessage: () => void;
-	setErrorMessage: (errorMessage: string) => void;
-	// setIsAuthChecked: (isAuthChecked: boolean) => void;
-	setIsAuthenticated: (isAuthenticated: boolean, role: string) => void;
+	currentUser: Doctor;
+	getCurrentUser: (uid: string) => Promise<void>;
+	clearIsAuthenticated: () => void;
+	setIsAuthenticated: (user: Doctor) => void;
 	// setSuccessMessage: (successMessage: string) => void;
 	// setUserAdmin: (userAdmin: IUserAdmin) => void;
-	signInUser: ({ email, password }: AuthUser) => Promise<void>;
-	signOutUser: () => Promise<void>;
-	// signUpUser: ({ email, password }: IAuthUser) => Promise<void>;
+	signInUser: ({ email, password }: AuthUser) => Promise<string>;
+	signOutUser: () => Promise<string>;
+	signUpUser: ({ email, password }: AuthUser) => Promise<string>;
 	// updateUserEmail: (email: string) => Promise<void>;
 };

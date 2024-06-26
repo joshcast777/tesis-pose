@@ -1,31 +1,49 @@
-import { errorResponse } from "@/constants";
-import { firebaseGetDoctors } from "@/firebase/services/database.firebase";
-import { ApiResponse, Doctor } from "@/types";
-import { DoctorStore } from "@/types/store/doctor-store.type";
+import { DefaultValues, ErrorMessages } from "@/constants";
+import { firebaseEditDoctor, firebaseGetDoctor, firebaseGetDoctorByEmail, firebaseGetDoctors, firebaseSaveDoctor } from "@/firebase/services";
+import { ApiResponse, Doctor, DoctorCreate } from "@/types";
+import { DoctorStore } from "@/types/store";
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 
 export const doctorStore = create<DoctorStore>()(
 	devtools((set) => ({
-		errorMessage: "",
 		doctors: [],
-		clearErrorMessage: (): void => {
-			set(
-				{
-					errorMessage: ""
-				},
-				false,
-				"SET_ERROR_MESSAGE"
-			);
+		errorMessage: "",
+		editDoctor: async (id: string, doctor: DoctorCreate): Promise<string> => {
+			const apiResponse: ApiResponse<undefined> = await firebaseEditDoctor(id, doctor);
+
+			if (apiResponse.message !== "") {
+				return apiResponse.message;
+			}
+
+			return "";
 		},
-		setErrorMessage: (message: string): void => {
-			set(
-				{
-					errorMessage: message
-				},
-				false,
-				"SET_ERROR_MESSAGE"
-			);
+		getDoctor: async (id: string): Promise<Doctor | string> => {
+			const apiResponse: ApiResponse<Doctor> = await firebaseGetDoctor(id);
+
+			if (apiResponse.message !== "") {
+				return apiResponse.message;
+			}
+
+			return apiResponse.data!;
+		},
+		getDoctorByEmail: async (email: string): Promise<Doctor | string> => {
+			const apiResponse: ApiResponse<Doctor> = await firebaseGetDoctorByEmail(email);
+
+			if (!apiResponse.success) {
+				return ErrorMessages.DataNotFound;
+			}
+
+			return apiResponse.data!;
+		},
+		getDoctorById: async (id: string): Promise<Doctor> => {
+			const apiResponse: ApiResponse<Doctor> = await firebaseGetDoctor(id);
+
+			if (apiResponse.message !== "") {
+				return DefaultValues.Doctor;
+			}
+
+			return apiResponse.data!;
 		},
 		getDoctors: async (): Promise<void> => {
 			const apiResponse: ApiResponse<Doctor[]> = await firebaseGetDoctors();
@@ -33,7 +51,7 @@ export const doctorStore = create<DoctorStore>()(
 			if (!apiResponse.success) {
 				set(
 					{
-						errorMessage: `${errorResponse}Error al obtener los datos`
+						errorMessage: "Error/Error al obtener los datos"
 					},
 					false,
 					"SET_ERROR_MESSAGE"
@@ -44,10 +62,28 @@ export const doctorStore = create<DoctorStore>()(
 
 			set(
 				{
-					doctors: structuredClone(apiResponse.data)
+					doctors: apiResponse.data
 				},
 				false,
 				"SET_USER"
+			);
+		},
+		saveDoctor: async (doctor: DoctorCreate): Promise<string> => {
+			const apiResponse: ApiResponse<undefined> = await firebaseSaveDoctor(doctor);
+
+			if (apiResponse.message !== "") {
+				return apiResponse.message;
+			}
+
+			return "";
+		},
+		setErrorMessage: (message: string): void => {
+			set(
+				{
+					errorMessage: message
+				},
+				false,
+				"SET_ERROR_MESSAGE"
 			);
 		}
 	}))

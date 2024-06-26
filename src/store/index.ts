@@ -1,4 +1,5 @@
 import { authStore } from "./auth.store";
-import { userStore } from "./user.store";
+import { doctorStore } from "./doctor.store";
+import { globalStore } from "./global.store";
 
-export { authStore, userStore };
+export { authStore, doctorStore, globalStore };

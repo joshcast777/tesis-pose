@@ -1,4 +1,4 @@
-import { firebaseSignInUser, firebaseSignOutUser } from "./auth.firebase";
-import { firebaseGetUser } from "./database.firebase";
+import { firebaseGetAuthenticatedUser, firebaseSignInUser, firebaseSignOutUser, firebaseSignUpUser } from "./auth.firebase";
+import { firebaseEditDoctor, firebaseGetDoctor, firebaseGetDoctorByEmail, firebaseGetDoctors, firebaseSaveDoctor } from "./database.firebase";
 
-export { firebaseGetUser, firebaseSignInUser, firebaseSignOutUser };
+export { firebaseGetAuthenticatedUser, firebaseEditDoctor, firebaseGetDoctor, firebaseGetDoctorByEmail, firebaseGetDoctors, firebaseSaveDoctor, firebaseSignInUser, firebaseSignOutUser, firebaseSignUpUser };

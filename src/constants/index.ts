@@ -1,7 +1,7 @@
-import { doctorDefault } from "./doctor-default.constant";
-import { dataNotFound, errorResponse, notValidCredentials } from "./errors.constant";
-import { accessToken, role, uid } from "./local-storage-key.constant";
-import { loginDefault } from "./login-default.constant";
-import { userDefault } from "./user-default.constant";
+import { ApiErrors } from "./api-error.constant";
+import { DefaultValues } from "./default-values.constant";
+import { ErrorFields } from "./error-field.constant";
+import { ErrorMessages } from "./error-message.constant";
+import { LocalStorageKeys } from "./local-storage-key.constant";
 
-export { accessToken, dataNotFound, doctorDefault, errorResponse, loginDefault, notValidCredentials, role, uid, userDefault };
+export { ApiErrors, DefaultValues, ErrorFields, ErrorMessages, LocalStorageKeys };

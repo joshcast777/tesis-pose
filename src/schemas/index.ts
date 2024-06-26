@@ -1,3 +1,4 @@
+import { doctorSchema } from "./doctor.schema";
 import { formSchema } from "./login.schema";
 
-export { formSchema };
+export { doctorSchema, formSchema };

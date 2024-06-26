@@ -1,3 +1,4 @@
 import AdminDashboard from "./AdminDashboard";
+import DoctorForm from "./DoctorForm";
 
-export { AdminDashboard };
+export { AdminDashboard, DoctorForm };
